@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="index.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div id="header">
+			<header class="container-fluid">
+				
+				<div id = "logo">
+					<a class="navbar-brand" href="#" onclick="home()">
+						<script> 
+							function home(){
+								window.location.assign('/')
+							}
+						</script>
+						<img src="/logo.jpg" alt="" style="height: 80px; width: auto;">
+					</a>
+				</div>
+
+				
+				<ul class="nav nav-pills pull-right">
+					
+					<li class="dropdown">
+						<a href="#" onclick="signin()" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style ="color:#ffffff">Đăng nhập/Đăng kí<span class="caret"></span></a>
+						<script> 
+							function signin(){
+								window.location.assign('/signin')
+							}
+						</script>
+					</ul>
+
+			<div class="container center_div">
+				<form class="navbar-form" method="post" action="/search">
+					<input type="text" class="form-control" name="search" placeholder="Tìm kiếm tài liệu & đề thi...">
+					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+				</form>
+			</div>
+
+		</header>
+	</div>
+</body>
+</html>
