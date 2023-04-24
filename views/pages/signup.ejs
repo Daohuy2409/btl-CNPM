@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang = "vi">
+<head>
+	<meta charset ="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Sign up</title>
+	<link rel="stylesheet" href="signin.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!-- header ends here -->
+<div class="loginbox radius">
+    <!--loginheader-->
+    <div class="loginform">
+      <form id="login" action="/signup" method="POST">
+		<%if (data && data.error) {%>
+		<div id="signuperror" class="alert alert-danger">
+		<span> <%=data.error%> </span>
+		</div>
+		<%}%>
+        <div class="loginboxinner radius">
+          <div class="wrapper">
+            <div class="logo">
+              <a href="/" onclick="home()">
+                <script> 
+                  function home(){
+                    window.location.assign('/')
+                  }
+                </script>
+                <img src="/logo.jpg" alt="">
+              </a>
+            </div>
+            <div class="text-center mt-4 name">
+                Đăng kí
+            </div>
+            <form class="p-3 mt-3">
+              <div class="form-field d-flex align-items-center">
+                <span class="fa fa-user"></span>
+                <input type="text" id="firstname" name="firstname" placeholder="First Name"  />
+              </div>
+              <div class="form-field d-flex align-items-center">
+                <span class="fa fa-user"></span>
+                <input type="text" id="lastname" name="lastname" placeholder="Last Name"  />
+              </div>
+              <div class="form-field d-flex align-items-center">
+                <span class="fa fa-user"></span>
+                <input type="text" name="username" placeholder="Your User Name"/>
+              </div>
+              <div class="form-field d-flex align-items-center">
+                <span class="fas fa-key"></span>
+                <input type="password" name="passwords" placeholder="New Password">
+              </div>
+              <div class="form-field d-flex align-items-center">
+                <span class="fas fa-key"></span>
+                <input type="password" name="repasswords" placeholder="Re-Enter Password">
+              </div>
+              <button class="btn mt-3" type="submit" name="signup">Sign Up</button>
+            </form>
+
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+	<script src="https://fb.me/react-15.1.0.js"></script>
+	<script src="https://fb.me/react-dom-15.1.0.js"></script>
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+	<script type="text/jsx" src="dangnhap.js"></script>
+</body>
+
+
