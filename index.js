@@ -24,9 +24,9 @@ app.use(session({
     cookie: { secure: true }
 }));
 
-app.listen(3000, function () {
-    console.log('Listening on port 3000!');
-    console.log('http://localhost:3000');
+app.listen(8000, function () {
+    console.log('Listening on port 8000!');
+    console.log('http://localhost:8000');
 });
 
 var con = mysql.createConnection({
@@ -41,17 +41,17 @@ var signinUser;
 var search;
 app.get('/', function (req, res) {
     var sql = "SELECT * FROM `debai` ORDER BY(datediff(`date`,now())) DESC LIMIT 8;SELECT * FROM `news` ORDER BY(datediff(`date`,now())) DESC LIMIT 4";
-    con.query(sql, function (err, result) {
+    con.query(sql, function (err, results) {
         if (err) throw err;
-        res.render('pages/index', {result});
+        res.render('pages/index', {results});
     });
 });
 
 app.get('/toan', function (req, res) {
     var sql = "SELECT * FROM `debai` WHERE mon = 'toan'";
-    con.query(sql, function (err, result) {
+    con.query(sql, function (err, results) {
         if (err) throw err;
-        res.render('pages/monhoc/toan', {result});
+        res.render('pages/monhoc/toan', {results});
     });
 });
 
@@ -250,87 +250,77 @@ app.get('/giaodiendethi/:id', function(req, res) {
 	}
 });
 
-app.get('/giaodiendethidadangnhap/:id', function(req, res) {
+app.get('/giaodiendethidangnhap/:id', function(req, res) {
 	var id = req.params.id;
 	var data;
 	if (id){
 		var sql = "SELECT * FROM debai WHERE id = ?;SELECT * FROM comment WHERE id = ? ";
 		con.query(sql,[id,id], function(err, results){
 			if (err) throw err;
-			res.render('pages/giaodiendethidadangnhap', {data,results,signinUser});
+			res.render('pages/giaodiendethidangnhap', {data,results,signinUser});
 		});
 	}
 });
 
-app.post('/giaodiendethidadangnhap/:id', function(req, res) {
-    var id = req.params.id;
-    var body = req.body;
-    if (body.texts.trim() == 0) {
-        var sql = "SELECT * FROM debai WHERE id = ?;SELECT * FROM comment WHERE id = ? ";
-        con.query(sql,[id,id], function(err, results) {
-            if (err) throw err;
-            res.render('pages/giaodiendethidadangnhap', {data: {error: 'Lỗi bình luận'},results,signinUser});
-        });
-    }
-    else if (body.texts.trim().length > 50) {
-        var sql = "SELECT * FROM debai WHERE id = ?;SELECT * FROM comment WHERE id = ? ";
-        con.query(sql,[id,id], function(err, results) {
-            if (err) throw err;
-            res.render('pages/giaodiendethidadangnhap', {data: {error: 'Lỗi bình luận'},results,signinUser});
-        });
-    }
-    else {
-        var comment = {
-            id: id,
-            username: signinUser.username,
-            firstname: signinUser.firstname,
-            lastname: signinUser.lastname,
-            comment: body.texts
-        };
+app.post('/giaodiendethidangnhap/:id', function(req, res) {
+	var ids = req.params.id;
+	var body = req.body;
+	if (body.texts.trim()== 0) {
+		var sql = "SELECT * FROM debai WHERE id = ?;SELECT * FROM comment WHERE id = ? ";
+		con.query(sql,[ids,ids], function(err, results){
+			if (err) throw err;
+			res.render('pages/giaodiendethidangnhap', {data:{error:"Lỗi bình luận"},results,signinUser});
+		});
+	}
+	else if (body.texts.trim() > 50) {
+		var sql = "SELECT * FROM debai WHERE id = ?;SELECT * FROM comment WHERE id = ? ";
+		con.query(sql,[ids,ids], function(err, results){
+			if (err) throw err;
+			res.render('pages/giaodiendethidangnhap', {data:{error:"Lỗi bình luận"},results,signinUser});
+		});
+	}
+	else {
+	var cm = {
+		id : ids,
+		username : signinUser.username,
+		firstname : signinUser.firstname,
+		lastname : signinUser.lastname,
+		comment : body.texts
+	};
 
-        if (comment) {
-            var defer = q.defer();
-            var query = con.query('INSERT INTO comment SET ?', comment, function(err, result) {
-                if (err) {
-                    defer.reject(err);
-                } else {
-                    defer.resolve(result);
-                }
-            });
-            var check = defer.promise;
-        }
-        else {
-            var check = false;
-        }
-
-        var data;
-
-        if (check) {
-            var sql = "SELECT * FROM debai WHERE id = ?;SELECT * FROM comment WHERE id = ? ";
-		    con.query(sql,[ids,ids], function(err, results){
-			    if (err) throw err;
-			    res.render('pages/giaodiendethidadangnhap', {data,  results,signinUser});
-		    });
-        }
-        else {
-            var sql = "SELECT * FROM debai WHERE id = ?;SELECT * FROM comment WHERE id = ? ";
-		    con.query(sql,[ids,ids], function(err, results){
-			    if (err) throw err;
-			    res.render('pages/giaodiendethidadangnhap', {data:{error:"Lỗi bình luận"},results,signinUser});
-		    });
-        }
-    }
-});
-
-app.post('/search', function(req, res) {
-    search = req.body.search;
-    if (search.trim() != 0) {
-        var sql = "SELECT * FROM debai WHERE LOWER(name) LIKE '%"+ search.toLowerCase() +"%'";
-        con.query(sql, function(err, results) {
-            if (err) throw err;
-            res.render('pages/search', {search, results});
-        });
-    }
+	if (cm) {
+		var defer = q.defer();
+		var query = con.query("INSERT INTO comment SET ?", cm, function(err,results) {
+			if (err) {
+				defer.reject(err);
+			}
+			else {
+				defer.resolve(results);
+			}
+		});
+		var check = defer.promise;
+	}
+	else {
+		var check = false;
+	}
+	var data;
+	
+	if (!check) {
+		var sql = "SELECT * FROM debai WHERE id = ?;SELECT * FROM comment WHERE id = ? ";
+		con.query(sql,[ids,ids], function(err, results){
+			if (err) throw err;
+			res.render('pages/giaodiendethidangnhap', {data:{error:"Lỗi bình luận"},results,signinUser});
+		});
+	}
+	else {
+		var sql = "SELECT * FROM debai WHERE id = ?;SELECT * FROM comment WHERE id = ? ";
+		con.query(sql,[ids,ids], function(err, results){
+			if (err) throw err;
+			res.render('pages/giaodiendethidangnhap', {data,results,signinUser});
+		});
+	}
+	}
+	
 });
 
 app.post('/signin', function(req,res) {
@@ -395,35 +385,58 @@ app.post('/signup', function(req,res) {
 		res.render('pages/signup', {data: {error:  "Mật khẩu không trùng khớp!"}});
 	}
 	else {
-		users = {
-		username: signup.username,
-		firstname: signup.firstname,
-		lastname: signup.lastname,
-		passwords: signup.passwords
-	};
-
-	if (users) {
-
-		var defer = q.defer();
-		var query = con.query("INSERT INTO user SET ?", users, function(err,results) {
+		// Kiểm tra tài khoản đã tồn tại hay chưa
+		var query = con.query("SELECT * FROM user WHERE username = ?", signup.username, function(err, results) {
 			if (err) {
-				defer.reject(err);
+				console.log(err);
+				res.render('pages/signup', {data: {error: "Lỗi khi kiểm tra tài khoản"}});
+			}
+			else if (results.length > 0) {
+				res.render('pages/signup', {data: {error: "Tài khoản đã tồn tại"}});
 			}
 			else {
-				defer.resolve(results);
+				// Thêm tài khoản vào CSDL
+				users = {
+					username: signup.username,
+					firstname: signup.firstname,
+					lastname: signup.lastname,
+					passwords: signup.passwords
+				};
+
+				var defer = q.defer();
+				var query = con.query("INSERT INTO user SET ?", users, function(err,results) {
+					if (err) {
+						defer.reject(err);
+					}
+					else {
+						defer.resolve(results);
+					}
+				});
+				var check = defer.promise;
+
+				if (!check) {
+					res.render('pages/signup', {data: {error:  "Không thể tạo tài khoản"}});
+				}
+				else {
+					res.render('pages/signin', {data: {}});
+				}
 			}
 		});
-		var check = defer.promise;
 	}
+});
+
+app.post('/search', function(req, res) {
+    search = req.body.search;
+    if (search.trim() != 0) {
+        var sql = "SELECT * FROM debai WHERE LOWER(name) LIKE '%"+ search.toLowerCase() +"%'";
+        con.query(sql, function(err, results) {
+            if (err) throw err;
+            res.render('pages/search', {search, results});
+        });
+    }
 	else {
-		var check = false;
-	}
-	if (!check) {
-		res.render('pages/signup', {data: {error:  "Không thể tạo tài khoản"}});
-	}
-	else {
-		res.render('pages/signin', {data: {}});
-	}
+		res.render('pages/search', {search, results: {error: "Vui lòng nhập từ khóa tìm kiếm!"}});
+    	return;
 	}
 });
 
@@ -436,4 +449,8 @@ app.post('/searchdn', function(req, res) {
             res.render('pages/searchdn', {search, results, signinUser});
         });
     }
+	else {
+		res.render('pages/searchdn', {search, results: {error: "Vui lòng nhập từ khóa tìm kiếm!"}, signinUser});
+		return;
+	}
 });

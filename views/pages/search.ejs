@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Hocsinhgioi.vn</title>
+	<link rel="shortcut icon" type="image/png" href="/logo.jpg" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="index.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div id="header">
+			<header class="container-fluid">
+
+				<div id="logo">
+					<a class="navbar-brand" href="#" onclick="home()">
+						<script>
+							function home() {
+								window.location.assign('/')
+							}
+						</script>
+						<img src="/logo.jpg" alt="" style="height: 80px; width: auto;">
+					</a>
+				</div>
+
+
+				<ul class="nav nav-pills pull-right">
+
+					<li class="dropdown">
+						<a href="#" onclick="signin()" class="dropdown-toggle" data-toggle="dropdown" role="button"
+							aria-haspopup="true" aria-expanded="false" style="color:#ffffff">Đăng nhập/Đăng kí<span
+								class="caret"></span></a>
+						<script>
+							function signin() {
+								window.location.assign('/signin')
+							}
+						</script>
+				</ul>
+
+				<div class="container center_div">
+					<form class="navbar-form" method="post" action="/search">
+						<input type="text" class="form-control" name="search"
+							placeholder="Tìm kiếm tài liệu & đề thi...">
+						<button type="submit" class="btn btn-default"><span
+								class="glyphicon glyphicon-search"></span></button>
+					</form>
+				</div>
+
+			</header>
+		</div>
+
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapse" data-toggle="collapse"
+				data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="a"><a href="/"><span class="glyphicon glyphicon-home"></span>Trang chủ</a></li>
+				<li class="a"><a href="/toan">Toán Học</a></li>
+				<li class="a"><a href="/van">Ngữ Văn</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Ngoại Ngữ <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="/eng">English</a></li>
+						<li><a href="/phap">French</a></li>
+						<li><a href="/nhat">Japanese</a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Khoa học Tự Nhiên<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="/ly">Vật Lý</a></li>
+						<li><a href="/hoa">Hóa Học</a></li>
+						<li><a href="/sinh">Sinh Học</a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false">Khoa học Xã hội<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="/su">Lịch Sử</a></li>
+						<li><a href="/dia">Địa Lý</a></li>
+						<li><a href="/gdcd">Công Dân</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div> <!-- /.navbar-collapse -->
+	</nav> <!-- end nav -->
+
+	<div role="main" id="main">
+		<% if (results.error) { %>
+			<div class="alert alert-danger" role="alert">
+				<%= results.error %>
+			</div>
+		<% } else { %>
+			<section> 
+				<div class = "row">
+					<div class = "col-md-12">
+						<h3><u> Kết quả tìm kiếm cho: "<%=search%>"</u></h3>
+					</div>
+				</div>
+			</section>
+			<% if(results.length) { %>
+				<ul>
+					<% results.forEach(function(result) { %>
+							<section> 
+								<div class="row">
+									<div class="col-md-3 col-sm-4" >
+										<a href="/giaodiendethi/<%=result.id%>" class="thumbnail">	
+											<img src="<%=result.link%>" alt="de1" style="width:150px;height:150px">
+											</a>
+									</div>
+									<div class="col-md-9 col-sm-8" >
+										<a href="/giaodiendethi/<%=result.id%>">
+											<h4> <%=result.name%> </h4> 
+										</a>
+									</div>
+								</div>
+							</section>
+						<% }); %>
+				</ul>
+			<% } else { %>
+				<section>
+					<div class="row">
+						<div class="col-md-12">
+							<h4> Không tìm thấy kết quả nào </h4>
+						</div>
+					</div>
+				</section>
+			<% } %>
+		<% } %>
+		
+	</div>
+		<a href="#" class="top"></a>
+		
+		<footer class="bs-docs-footer">
+			<div class="container">
+				<ul>
+				<p>Chia sẻ tài liệu ôn thi</p>
+				<p> Chúc các bạn thi tốt!</p>
+			</ul>
+		</div>
+	</footer>
+
+</body>
+
+</html>
