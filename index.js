@@ -51,7 +51,7 @@ app.get('/toan', function (req, res) {
     var sql = "SELECT * FROM `debai` WHERE mon = 'toan'";
     con.query(sql, function (err, results) {
         if (err) throw err;
-        res.render('pages/monhoc/toan', {results});
+        res.render('pages/monhoc/Toanhoc', {results});
     });
 });
 
@@ -352,14 +352,15 @@ app.post('/signin', function(req,res) {
 		check.then(function(users){
 			var user = users[0];
 			if (user == null) {
-				res.render('pages/signin', {data: {error:  "Tài khoản không tồn tại"}});
+				res.render('pages/signin', {data: {error:  "Tên đăng nhập hoặc mật khẩu không đúng."}});
 			}
 			else if (user.passwords == signin.passwords) {
 				var sql = "SELECT * FROM debai ORDER BY(datediff(`date`, now())) DESC LIMIT 8;SELECT * FROM `news`  ORDER BY(datediff(`date`, now())) DESC LIMIT 4";
 				con.query(sql, function(err, results) {
 				if (err) throw err;
 				signinUser = user;
-				res.render('pages/giaodiendadangnhap', {results, signinUser});
+				res.redirect('/giaodiendadangnhap');
+
 				
 	});
 			}
