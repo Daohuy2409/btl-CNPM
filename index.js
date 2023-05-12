@@ -419,7 +419,7 @@ app.post('/signup', function(req,res) {
 					res.render('pages/signup', {data: {error:  "Không thể tạo tài khoản"}});
 				}
 				else {
-					res.render('pages/signin', {data: {}});
+					res.redirect('/signin')
 				}
 			}
 		});

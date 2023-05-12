@@ -112,15 +112,15 @@
             </div>
             <% }); %>
 
-
+            <% results[0].forEach(function(result) { %>
                 <div class="col-md-12">
                     <h3><u> Bình luận: </u></h3>
                 </div>
-                <p style="margin-top: ">
+                <form>
 
-                    <input type="text" id="comm" class="btn btn-default" placeholder="Thêm bình luận..." />
+                    <input type="text" id="comm" class="btn btn-default" name="texts" placeholder="Thêm bình luận..." />
 
-                    <button onclick="needsignin()" class="btn btn-default pull-right"> Comment</button>
+                    <button type="submit" onclick="needsignin()" class="btn btn-default pull-right"> Comment</button>
                     <script>
                         function needsignin() {
                             var conf = false;
@@ -129,18 +129,22 @@
 
                                 window.location.assign('/signin');
                             }
+                            else {
+                                return false;
+                            }
                         }
                     </script>
-                </p>
+                </form>
                 <div>
                     <% results[1].forEach(function(cm) { %>
                       <div id="comment" style="<% if(!cm){%> display: none <%}%>" class="">
                         <p style="margin-left: 10px; font-size: 18px;"><strong><%= cm.firstname %> <%= cm.lastname %>:</strong> <%= cm.comment %></p>
-                        <hr> <!--Thêm dòng này để phân tách các comment-->
+                        <hr>
                       </div>
                     <% }); %>
                 </div>
     </div>
+    <% }); %>
 
     </div>
 
